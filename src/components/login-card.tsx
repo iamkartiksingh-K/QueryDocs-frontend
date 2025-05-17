@@ -28,7 +28,7 @@ const formSchema = z.object({
 import { Mail, Github } from "lucide-react";
 import { SeparatorWithText } from "@/components/ui/separator-with-text";
 import { IconGroup, type Icon } from "@/components/icon-group";
-
+import Link from "next/link";
 type LoginCardProps = {
   variant?: "default" | "inline";
   authIconVariant?: "default" | "inline";
@@ -142,9 +142,9 @@ export const LoginCard = ({
       <CardFooter className="flex justify-center">
         <div className="text-center text-sm">
           Don&apos;t have an account?{" "}
-          <a href="#" className="underline underline-offset-4">
+          <Link href="/auth/register" className="underline underline-offset-4">
             Sign up
-          </a>
+          </Link>
         </div>
       </CardFooter>
     </Card>

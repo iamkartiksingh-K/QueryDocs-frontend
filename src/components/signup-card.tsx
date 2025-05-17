@@ -26,6 +26,7 @@ import { Label } from "./ui/label";
 import { Mail, Github } from "lucide-react";
 import { SeparatorWithText } from "@/components/ui/separator-with-text";
 import { IconGroup, type Icon } from "@/components/icon-group";
+import Link from "next/link";
 const formSchema = z
   .object({
     name: z.string().min(1, { message: "Name cannot be empty!" }),
@@ -235,9 +236,9 @@ export const SignupCard = ({
       <CardFooter className="flex justify-center">
         <div className="text-center text-sm">
           Already have an account?{" "}
-          <a href="#" className="underline underline-offset-4">
+          <Link href="/auth/login" className="underline underline-offset-4">
             Login
-          </a>
+          </Link>
         </div>
       </CardFooter>
     </Card>
