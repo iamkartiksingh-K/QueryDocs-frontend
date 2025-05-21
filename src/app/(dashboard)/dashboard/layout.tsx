@@ -29,9 +29,10 @@ export default function DashboardLayout({
       >
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full mr-16">
-            <SidebarTrigger />
-            <div className="mx-16">{children}</div>
+          <SidebarTrigger />
+
+          <main className="w-full">
+            <div className="h-screen">{children}</div>
           </main>
         </SidebarProvider>
       </body>

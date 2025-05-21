@@ -12,7 +12,7 @@ export default function Docs() {
     },
   ];
   return (
-    <div className="w-full">
+    <div className="w-full px-16 pt-10">
       <div className="flex items-end w-full justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Documents</h1>
