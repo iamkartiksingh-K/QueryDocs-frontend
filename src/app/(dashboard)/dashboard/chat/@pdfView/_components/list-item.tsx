@@ -21,7 +21,13 @@ export default function ListItem({
   );
   return (
     <div className={listClass} onClick={onClick}>
-      <Image src={icon} alt="book logo" width={35} height={35} />
+      <Image
+        src={icon}
+        alt="book logo"
+        width={35}
+        height={35}
+        className="w-5 lg:w-8"
+      />
       <p className="text-xs text-gray-600  w-full text-center">
         {title.slice(0, Math.min(title.length, 8))}
       </p>

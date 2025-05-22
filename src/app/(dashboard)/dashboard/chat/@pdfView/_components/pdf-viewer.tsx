@@ -32,7 +32,7 @@ export default function ViewPdf({ className }: { className?: string }) {
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
         <div>
           <div className={"h-dvh flex flex-col border"}>
-            <div className="flex items-center justify-between border-b p-2 h-16">
+            <div className="flex items-center justify-between border-y p-2 mt-15 h-1/12 lg:mt-0">
               <div>
                 <CustomZoom onClick={increaseZoom} className="mr-8 ml-3">
                   <ZoomIn />
@@ -46,7 +46,7 @@ export default function ViewPdf({ className }: { className?: string }) {
                 <CurrentPageLabel /> <span>/</span> <NumberOfPages />
               </div>
             </div>
-            <div className="h-11/12 overflow-auto">
+            <div className="h-11/12 lg:h-11/12 overflow-auto">
               <Viewer
                 fileUrl={fileUrl}
                 plugins={[zoomPluginInstance, pageNavigationPluginInstance]}

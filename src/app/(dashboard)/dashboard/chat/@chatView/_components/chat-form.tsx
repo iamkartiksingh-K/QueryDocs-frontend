@@ -10,7 +10,7 @@ export default function ChatForm({
 }: {
   input: string;
   setInputAction: Dispatch<SetStateAction<string>>;
-  onSubmitAction: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSubmitAction: () => void;
 }) {
   return (
     <form className="rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring p-1 mt-3 max-w-[1000px] w-full mb-3">
@@ -21,9 +21,8 @@ export default function ChatForm({
         onChange={(e) => {
           const lastChar = e.target.value.charCodeAt(e.target.value.length - 1);
           if (lastChar === 10) {
-            onSubmitAction(e);
-          }
-          setInputAction(e.target.value);
+            onSubmitAction();
+          } else setInputAction(e.target.value);
         }}
       />
       <div className="flex items-center p-3 pt-0">
@@ -31,7 +30,10 @@ export default function ChatForm({
           size="sm"
           className="ml-auto gap-1.5 "
           variant={"default"}
-          onClick={onSubmitAction}
+          onClick={(e) => {
+            e.preventDefault();
+            onSubmitAction();
+          }}
         >
           Search
           <CornerDownLeft className="size-3.5" />

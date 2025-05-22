@@ -3,10 +3,9 @@ import { useState } from "react";
 import ChatForm from "./_components/chat-form";
 export default function ChatView() {
   const [input, setInput] = useState("");
-  const sendResponse = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.preventDefault();
+  const sendResponse = () => {
+    console.log(input);
     setInput("");
-    e.target.value = "";
   };
   return (
     <div className="h-full px-5 flex flex-col justify-center items-center overflow-hidden">

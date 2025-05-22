@@ -23,7 +23,7 @@ export default function PDFView() {
   return (
     <div className="h-dvh flex">
       <ViewPdf className="grow" />
-      <div className="min-w-[100px] h-11/12 flex flex-col items-center justify-center gap-3 overflow-auto">
+      <div className="w-[50px] lg:w-[100px] h-11/12 flex flex-col items-center justify-center gap-3 overflow-auto">
         {docList.map((doc, index) => {
           return (
             <ListItem
