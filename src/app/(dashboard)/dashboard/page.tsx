@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
 export default function Dashboard() {
   redirect("/dashboard/chat");
-  return <div></div>;
 }

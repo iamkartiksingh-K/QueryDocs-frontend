@@ -21,14 +21,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import classNames from "classnames";
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
 import { Mail, Github } from "lucide-react";
 import { SeparatorWithText } from "@/components/ui/separator-with-text";
 import { IconGroup, type Icon } from "@/components/icon-group";
 import Link from "next/link";
+import { login } from "@/lib/api";
+import { redirect } from "next/navigation";
+import { useAuthStore } from "@/lib/store/authStore";
+
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
 type LoginCardProps = {
   variant?: "default" | "inline";
   authIconVariant?: "default" | "inline";
@@ -44,6 +49,7 @@ export const LoginCard = ({
   externalAuth,
   className,
 }: LoginCardProps) => {
+  const { setLogin } = useAuthStore();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,8 +57,11 @@ export const LoginCard = ({
       password: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const data = await login(values.email, values.password);
+    localStorage.setItem("token", data.access_token);
+    setLogin(true);
+    redirect("/dashboard");
   }
 
   const externalAuthList: Icon[] = [
