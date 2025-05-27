@@ -27,8 +27,6 @@ import { IconGroup, type Icon } from "@/components/icon-group";
 import Link from "next/link";
 import { login } from "@/lib/api";
 import { redirect } from "next/navigation";
-import { useAuthStore } from "@/lib/store/authStore";
-
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string(),
@@ -49,7 +47,6 @@ export const LoginCard = ({
   externalAuth,
   className,
 }: LoginCardProps) => {
-  const { setLogin } = useAuthStore();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,10 +55,8 @@ export const LoginCard = ({
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const data = await login(values.email, values.password);
-    localStorage.setItem("token", data.access_token);
-    setLogin(true);
-    redirect("/dashboard");
+    const status = await login(values.email, values.password);
+    if (status.success) redirect("/dashboard");
   }
 
   const externalAuthList: Icon[] = [

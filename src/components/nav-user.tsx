@@ -1,5 +1,4 @@
 import { ChevronsUpDown, LogOut } from "lucide-react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -15,13 +14,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { logOut } from "@/app/_utils/auth-client";
+import { redirect } from "next/navigation";
 
 export function NavUser({
   user,
 }: {
   user: {
-    name: string;
-    email: string;
+    name?: string;
+    email?: string;
     avatar?: string;
   };
 }) {
@@ -68,7 +69,11 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                logOut().then(() => redirect("/auth/login"));
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

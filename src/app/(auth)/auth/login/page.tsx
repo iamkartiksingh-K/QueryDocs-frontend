@@ -5,6 +5,7 @@ import Link from "next/link";
 
 export default function Page() {
   const classes = "flex w-full h-dvh items-center";
+
   return (
     <div className={classes}>
       <div className="w-1/2 h-full grow grid grid-rows-3 grid-cols-3 place-items-center">
