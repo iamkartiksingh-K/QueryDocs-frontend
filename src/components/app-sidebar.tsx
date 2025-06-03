@@ -18,6 +18,7 @@ import Link from "next/link";
 import { NavUser } from "./nav-user";
 import { useUserStore } from "@/lib/store/userStore";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 // Menu items.
 const items = [
   {
@@ -34,6 +35,8 @@ const items = [
 
 export default function AppSidebar() {
   const { setUser, user } = useUserStore();
+  const path = usePathname();
+
   useEffect(() => {
     fetch("/api/profile")
       .then((data) => {
@@ -60,7 +63,11 @@ export default function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={path === item.url}
+                    size={"default"}
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

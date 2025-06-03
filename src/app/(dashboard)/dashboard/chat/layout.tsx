@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Tab from "./_components/tab";
 import TabsContainer from "./_components/tabs-container";
+import SplashScreen from "./_components/splashScreen";
 import classNames from "classnames";
 
 export default function ChatLayout({
@@ -12,6 +13,7 @@ export default function ChatLayout({
   pdfView: React.ReactNode;
 }) {
   const [visible, setVisible] = useState(1);
+  const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,6 +25,7 @@ export default function ChatLayout({
     return () => window.removeEventListener("resize", handleResize);
   }, [visible]);
 
+  useEffect(() => {}, []);
   const tabClass = classNames("fixed block lg:hidden");
   const chatClass = classNames("w-10/12 lg:w-1/2 lg:block", {
     ["block"]: visible === 1 || visible === -1,
@@ -34,16 +37,22 @@ export default function ChatLayout({
   });
   return (
     <div className="flex justify-center h-screen">
-      <TabsContainer className={tabClass}>
-        <Tab id={1} selected={visible} select={() => setVisible(1)}>
-          Chat
-        </Tab>
-        <Tab id={2} selected={visible} select={() => setVisible(2)}>
-          Docs
-        </Tab>
-      </TabsContainer>
-      <div className={chatClass}>{chatView}</div>
-      <div className={pdfClass}>{pdfView}</div>
+      {showChat ? (
+        <>
+          <TabsContainer className={tabClass}>
+            <Tab id={1} selected={visible} select={() => setVisible(1)}>
+              Chat
+            </Tab>
+            <Tab id={2} selected={visible} select={() => setVisible(2)}>
+              Docs
+            </Tab>
+          </TabsContainer>
+          <div className={chatClass}>{chatView}</div>
+          <div className={pdfClass}>{pdfView}</div>
+        </>
+      ) : (
+        <SplashScreen />
+      )}
     </div>
   );
 }
