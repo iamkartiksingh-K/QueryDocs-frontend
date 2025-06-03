@@ -27,6 +27,8 @@ import { Mail, Github } from "lucide-react";
 import { SeparatorWithText } from "@/components/ui/separator-with-text";
 import { IconGroup, type Icon } from "@/components/icon-group";
 import Link from "next/link";
+import { register } from "@/lib/api";
+import { redirect } from "next/navigation";
 const formSchema = z
   .object({
     name: z.string().min(1, { message: "Name cannot be empty!" }),
@@ -92,8 +94,9 @@ export const SignupCard = ({
       termsAndCondition: false,
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const status = await register(values.name, values.email, values.password);
+    if (status.success) redirect("/dashboard");
   }
 
   const externalAuthList: Icon[] = [
