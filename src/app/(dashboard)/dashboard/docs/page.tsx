@@ -1,15 +1,27 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { DataTable } from './data-table';
-import { columns, type Docs } from './columns';
-import { Button } from '@/components/ui/button';
-import { Upload } from 'lucide-react';
-import Modal from '@/components/ui/modal';
-import { FiFolder, FiUploadCloud } from 'react-icons/fi';
+import { useState, useEffect } from "react";
+import { DataTable } from "./data-table";
+import { getColumns, type Docs } from "./columns";
+import { Button } from "@/components/ui/button";
+import { Upload } from "lucide-react";
+import Modal from "@/components/ui/modal";
+import { FiFolder, FiUploadCloud } from "react-icons/fi";
 
 export default function Docs() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [docs, setDocs] = useState<Docs[]>([]);
+
+  async function loadDocuments() {
+    const response = await fetch("/api/documents");
+    const data = await response.json();
+    setDocs(data.results);
+    console.log(data);
+  }
+
+  useEffect(() => {
+    loadDocuments();
+  }, []);
 
   const handleUploadClick = () => {
     setIsModalOpen(true);
@@ -18,15 +30,6 @@ export default function Docs() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  const data: Docs[] = [
-    {
-      name: 'Book1',
-      url: '#',
-      size: '500KB',
-      created: '16 May 2025',
-    },
-  ];
 
   return (
     <div className="w-full px-16 pt-10">
@@ -44,7 +47,7 @@ export default function Docs() {
       </div>
 
       <div className="w-full mt-18">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={getColumns(loadDocuments)} data={docs} />
       </div>
 
       {/* Upload Modal */}
@@ -73,9 +76,7 @@ export default function Docs() {
             >
               Cancel
             </button>
-            <button
-              className="px-4 py-2 rounded-md text-white bg-black hover:bg-neutral-900"
-            >
+            <button className="px-4 py-2 rounded-md text-white bg-black hover:bg-neutral-900">
               Upload File
             </button>
           </div>
