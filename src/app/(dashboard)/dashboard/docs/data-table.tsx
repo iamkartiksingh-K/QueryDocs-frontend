@@ -6,7 +6,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -15,7 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import SearchDocs from "@/components/search-docs";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -23,10 +25,36 @@ interface DataTableProps<TData, TValue> {
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
+  data: initialData,
 }: DataTableProps<TData, TValue>) {
+  const [data, setData] = useState<TData[]>(initialData);
+  const [searchResult, setSearchResult] = useState<TData[]>([]);
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      handleSearch(value);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value]);
+
+  const handleSearch = async (keyword: string) => {
+    try {
+      const res = await fetch(
+        `/api/search?keyword=${encodeURIComponent(keyword)}`,
+      );
+      const result = await res.json();
+      setSearchResult(result.results);
+    } catch (err) {
+      console.error("Failed to fetch search results:", err);
+    }
+  };
+
   const table = useReactTable({
-    data,
+    data: searchResult.length ? searchResult : data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -35,7 +63,13 @@ export function DataTable<TData, TValue>({
     <div>
       <div>
         <div className="flex items-center py-4">
-          <Input placeholder="Filter docs..." className="max-w-sm" />
+          <Input
+            type="text"
+            placeholder="Filter docs..."
+            className="max-w-sm"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
         </div>
       </div>
       <div className="rounded-md border">
@@ -43,18 +77,16 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
