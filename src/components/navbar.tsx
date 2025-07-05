@@ -1,38 +1,35 @@
-"use client";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import Image from "next/image";
 import Link from "next/link";
+import { FolderOpen } from "lucide-react";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { ShinyButton } from "@/components/magicui/shiny-button";
+
 export default function Navbar() {
   return (
-    <NavigationMenu className="!max-w-dvw p-3">
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <Link href="/" passHref>
-            <Image
-              src={"/query-docs.png"}
-              alt="logo"
-              width={160}
-              height={160}
-            />
-          </Link>
-        </NavigationMenuItem>
-        <div className="md:w-sm lg:w-2xl"></div>
-        <NavigationMenuItem className="mx-4">
-          <Link
-            href="/auth/login"
-            className="border px-3 py-2 text-sm font-medium rounded-md"
-          >
-            Login
-          </Link>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/auth/register">Sign up</Link>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+    <nav className="fixed top-0 left-0 right-0 z-50 w-full">
+      <div className="w-full bg-white/30 backdrop-blur-md border-b border-gray-200/50">
+        <div className="w-full max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-500 p-2 rounded-lg">
+              <FolderOpen className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-2xl font-bold text-gray-900">QueryDocs</span>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <Link href="/auth/login">
+            <ShinyButton className="rounded-full px-6 py-2.5 text-sm font-medium">  
+              Login
+             </ShinyButton> 
+            </Link>
+
+            <Link href="/auth/register">
+            <ShimmerButton className="rounded-full px-6 py-2.5 text-sm font-medium">
+             SIGN UP
+            </ShimmerButton>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </nav>
   );
 }
