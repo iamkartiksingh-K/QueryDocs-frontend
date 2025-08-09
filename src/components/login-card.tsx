@@ -1,4 +1,6 @@
 "use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,8 +27,9 @@ import { Mail, Github } from "lucide-react";
 import { SeparatorWithText } from "@/components/ui/separator-with-text";
 import { IconGroup, type Icon } from "@/components/icon-group";
 import Link from "next/link";
-import { login } from "@/lib/api";
-import { redirect } from "next/navigation";
+import { useAuthStore } from "@/lib/store/authStore";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { toast } from "sonner";
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string(),
@@ -47,6 +50,9 @@ export const LoginCard = ({
   externalAuth,
   className,
 }: LoginCardProps) => {
+  const router = useRouter();
+  const { login, isLoading, error, clearError } = useAuthStore();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,9 +60,23 @@ export const LoginCard = ({
       password: "",
     },
   });
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const status = await login(values.email, values.password);
-    if (status.success) redirect("/dashboard");
+    clearError();
+    const result = await login(values.email, values.password);
+    
+    if (result.success) {
+      toast.success('Welcome back!', {
+        description: 'You have been logged in successfully.',
+        duration: 3000
+      });
+      router.push("/dashboard");
+    } else {
+      toast.error('Login Failed', {
+        description: result.error || 'Invalid email or password',
+        duration: 5000
+      });
+    }
   }
 
   const externalAuthList: Icon[] = [
@@ -137,8 +157,19 @@ export const LoginCard = ({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="cursor-pointer w-full">
-              Login
+            <Button 
+              type="submit" 
+              className="cursor-pointer w-full" 
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <LoadingSpinner size="sm" color="white" className="mr-2" />
+                  Signing in...
+                </>
+              ) : (
+                'Login'
+              )}
             </Button>
           </form>
         </Form>
